@@ -1,0 +1,5 @@
+requests
+pubnub
+ncclient==0.6.3
+netmiko==2.3.3
+urllib3
