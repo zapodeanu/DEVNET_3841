@@ -10,17 +10,6 @@
 The session will present a real-time messaging platform concept for network devices.
 This platform will enable network engineers to approach network management using creative, new methods and automate common troubleshooting workflows.
 
----
-The Challenge
-
-The Goal
-
-The Solution
-
-The Results
-Lower Mean Time to Repair
-Lower cost of providing service to customer
----
 
 **The Challenge:**
  - Slow time to respond to outages
@@ -29,17 +18,37 @@ Lower cost of providing service to customer
 **The Goal:**
  - Automated detection of issues and tickets operations
  - Troubleshoot and configure the customer network directly from ServiceNow
-
+ - Automate the collection of relevant info
+ 
 **The Solution:**
  - Integration between Cisco IOS XE, Guest Shell, DNA Center, ServiceNow, PubNub, and Webex Teams
 
 **Workflow:**
- - Embedded Event Manager will trigger execution of Python Script when condition match
-  - collect device management IPv4 address
-  - collect device details from Cisco DNA Center
-  - create new incident
-  - subscribe to PubNub channel to listen for CLI commands
-  - execute received EXEC or Config mode commands and update the ServiceNow incident
+ "monitor_route.py"
+ - EEM triggers execution when monitored route missing from routing table
+ - Find the IOS XE device management IP address, Gi0/0 – Python CLI
+ - Not the VPG IP address
+ - Find the device hostname using RESTCONF 
+ - Create a new ServiceNow incident - REST APIs
+ - Get Cisco DNA Center Auth Token – REST APIs
+ - Get device details, health and location from Cisco DNA Center - REST APIs
+ - Update the ServiceNow incident - REST APIs
+ - Will download pre-defined CLI commands from Cisco DNA Center - REST APIs
+ - Execute each command and update ServiceNow incident - REST APIs
+ - Identify if any configuration drifting from established baseline – Python CLI
+ - Update ticket with changes and the engineer identity - REST APIs
+ 
+ "subscriber_listener.py"
+ - Use of PubNub Python SDK
+ - Find out the IOS XE device management IP address and hostname
+ - Initialize the PubNub channel and subscribe with the hostname as the PubNub “uuid”
+ - Process messages as received
+ - If the “device” value equals the device hostname execute commands
+ - If the “device” value equals ”all” – execute commands
+ - If not a match – ignore
+ - The Ticket to be updated equals the value received
+ - Commands output will update the ticket directly
+
 
 **The Results:**
  - Lower Mean Time to Repair

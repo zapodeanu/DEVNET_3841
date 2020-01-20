@@ -25,7 +25,6 @@ __version__ = "0.1.0"
 __copyright__ = "Copyright (c) 2019 Cisco and/or its affiliates."
 __license__ = "Cisco Sample Code License, Version 1.1"
 
-
 import requests
 import urllib3
 import ncclient
@@ -168,6 +167,5 @@ def get_restconf_capabilities(ios_xe_host, ios_xe_user, ios_xe_pass):
     url = 'https://' + ios_xe_host + '/restconf/data/netconf-state/capabilities'
     header = {'Content-type': 'application/yang-data+json', 'accept': 'application/yang-data+json'}
     response = requests.get(url, headers=header, verify=False, auth=dev_auth)
-    capabilities_json =  response.json()
+    capabilities_json = response.json()
     return capabilities_json['ietf-netconf-monitoring:capabilities']
-

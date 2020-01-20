@@ -26,20 +26,16 @@ __copyright__ = "Copyright (c) 2019 Cisco and/or its affiliates."
 __license__ = "Cisco Sample Code License, Version 1.1"
 
 
-import requests
 import json
 import time
-import os
+
+import requests
 import urllib3
-import socket
-import re
-import utils
-
-from urllib3.exceptions import InsecureRequestWarning  # for insecure https warnings
 from requests.auth import HTTPBasicAuth  # for Basic Auth
+from urllib3.exceptions import InsecureRequestWarning  # for insecure https warnings
 
+import utils
 from config import DNAC_URL, DNAC_PASS, DNAC_USER
-
 
 urllib3.disable_warnings(InsecureRequestWarning)  # disable insecure https warnings
 
@@ -64,7 +60,6 @@ def get_dnac_jwt_token(dnac_auth):
     """
 
     url = DNAC_URL + '/dna/system/api/v1/auth/token'
-    print(url)
     header = {'content-type': 'application/json'}
     response = requests.post(url, auth=dnac_auth, headers=header, verify=False)
     dnac_jwt_token = response.json()['Token']
@@ -391,6 +386,7 @@ def check_template_deployment_status(depl_task_id, dnac_jwt_token):
     return deployment_status
 
 
+# noinspection PyBroadException
 def get_client_info(client_ip, dnac_jwt_token):
     """
     This function will retrieve all the information from the client with the IP address
@@ -783,6 +779,7 @@ def check_task_id_status(task_id, dnac_jwt_token):
     return task_result
 
 
+# noinspection PyBroadException
 def check_task_id_output(task_id, dnac_jwt_token):
     """
     This function will check the status of the task with the id {task_id}. Loop one seconds increments until task is completed
@@ -798,7 +795,6 @@ def check_task_id_output(task_id, dnac_jwt_token):
             task_response = requests.get(url, headers=header, verify=False)
             task_json = task_response.json()
             task_output = task_json['response']
-            task_output['endTime']
             completed = 'yes'
         except:
             time.sleep(1)
@@ -829,6 +825,7 @@ def create_path_trace(src_ip, dest_ip, dnac_jwt_token):
     return path_id
 
 
+# noinspection PyBroadException,PyBroadException,PyBroadException
 def get_path_trace_info(path_id, dnac_jwt_token):
     """
     This function will return the path trace details for the path visualisation {id}
@@ -867,6 +864,7 @@ def get_path_trace_info(path_id, dnac_jwt_token):
     return path_status, path_list
 
 
+# noinspection PyBroadException
 def check_ipv4_network_interface(ip_address, dnac_jwt_token):
     """
     This function will check if the provided IPv4 address is configured on any network interfaces
@@ -1010,6 +1008,7 @@ def get_device_config(device_name, dnac_jwt_token):
     return config_file
 
 
+# noinspection PyBroadException,PyBroadException
 def check_ipv4_address(ipv4_address, dnac_jwt_token):
     """
     This function will find if the IPv4 address is configured on any network interfaces or used by any hosts.
@@ -1051,6 +1050,7 @@ def check_ipv4_address_configs(ipv4_address, dnac_jwt_token):
     return False
 
 
+# noinspection PyBroadException,PyBroadException
 def check_ipv4_duplicate(config_file):
     """
     This function will:
@@ -1113,9 +1113,9 @@ def get_device_health(device_name, epoch_time, dnac_jwt_token):
     :param dnac_jwt_token: DNA C token
     :return: detailed network device information
     """
-    device_id = get_device_id_name(device_name, dnac_jwt_token)
-    url = DNAC_URL + '/dna/intent/api/v1/device-detail?timestamp=' + str(epoch_time) + '&searchBy=' + device_id
-    url += '&identifier=uuid'
+
+    url = DNAC_URL + '/dna/intent/api/v1/device-detail?timestamp=' + str(epoch_time) + '&searchBy=' + device_name
+    url += '&identifier=nwDeviceName'
     header = {'content-type': 'application/json', 'x-auth-token': dnac_jwt_token}
     response = requests.get(url, headers=header, verify=False)
     device_detail_json = response.json()
@@ -1136,13 +1136,3 @@ def get_site_health(epoch_time, dnac_jwt_token):
     site_health_json = response.json()['response']
     return site_health_json
 
-
-
-auth_token = get_dnac_jwt_token(DNAC_AUTH)
-print(auth_token)
-
-path_id = create_path_trace('10.93.130.46', '10.93.140.35', auth_token)
-time.sleep(10)
-
-print('Path Trace from 10.93.130.46 to 10.93.140.35')
-utils.pprint(get_path_trace_info(path_id, auth_token))

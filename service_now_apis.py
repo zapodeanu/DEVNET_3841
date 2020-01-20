@@ -203,7 +203,7 @@ def find_comment(incident, comment):
     """
     Find if any of the existing comments from the {incident} matches exactly the {comment}
     :param incident: incident number
-    :param comment: comment string to serach for
+    :param comment: comment string to search for
     :return: {True} if comment exist, {False} if not
     """
     comments_list = get_incident_comments(incident)

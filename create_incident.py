@@ -26,16 +26,15 @@ __copyright__ = "Copyright (c) 2019 Cisco and/or its affiliates."
 __license__ = "Cisco Sample Code License, Version 1.1"
 
 
-import requests
 import json
 import logging
-import netconf_restconf
-import config
-
-from config import SNOW_URL, SNOW_DEV, SNOW_PASS
-from config import IOS_XE_HOST, IOS_XE_USER, IOS_XE_PASS
-
+import urllib3
+import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+import netconf_restconf
+from config import IOS_XE_HOST, IOS_XE_USER, IOS_XE_PASS
+from config import SNOW_URL, SNOW_DEV, SNOW_PASS
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable insecure https warnings
 

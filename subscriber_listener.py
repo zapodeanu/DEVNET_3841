@@ -25,7 +25,6 @@ __version__ = "0.1.0"
 __copyright__ = "Copyright (c) 2019 Cisco and/or its affiliates."
 __license__ = "Cisco Sample Code License, Version 1.1"
 
-
 import json
 import requests
 import pubnub
@@ -33,7 +32,6 @@ import utils
 import service_now_apis
 import cli
 import logging
-
 
 from config import PUB_KEY, SUB_KEY, CHANNEL
 from config import IOS_XE_PASS, IOS_XE_USER
@@ -54,12 +52,10 @@ from cli import configure, execute, cli
 import netconf_restconf
 import dnac_apis
 
-
 DNAC_AUTH = HTTPBasicAuth(DNAC_USER, DNAC_PASS)
 
 
 def pubnub_init(device_uuid):
-
     # initialize the channel, with the device hostname
 
     pnconfig = PNConfiguration()
@@ -69,7 +65,6 @@ def pubnub_init(device_uuid):
     pnconfig.uuid = str(device_uuid)
     pubnub = PubNub(pnconfig)
     return pubnub
-
 
 
 class MySubscribeCallback(SubscribeCallback):
@@ -185,7 +180,6 @@ class MySubscribeCallback(SubscribeCallback):
             print('Message received not formatted properly, ignored')
 
 
-
 def main():
     execute('send log Application subscriber_listener.py started')
 
@@ -195,6 +189,7 @@ def main():
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S')
 
+    # noinspection PyGlobalUndefined
     global IOS_XE_HOST_IP, DEVICE_HOSTNAME, DEVICE_LOCATION
 
     # retrieve the ios xe device management ip address, Gi0/0

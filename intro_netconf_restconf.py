@@ -73,6 +73,7 @@ def get_netconf_int_oper_status(interface):
         result = m.get(interface_state_filter)
         xml_doc = xml.dom.minidom.parseString(result.xml)
         int_info = xml_doc.getElementsByTagName('oper-status')
+        # noinspection PyBroadException
         try:
             oper_status = int_info[0].firstChild.nodeValue
         except:
@@ -86,6 +87,7 @@ def get_restconf_int_oper_data(interface):
     header = {'Content-type': 'application/yang-data+json', 'accept': 'application/yang-data+json'}
     response = requests.get(url, headers=header, verify=False, auth=ROUTER_AUTH)
     interface_info = response.json()
+    # noinspection PyShadowingNames
     oper_data = interface_info['ietf-interfaces:interface']
     return oper_data
 
@@ -109,6 +111,7 @@ def get_netconf_hostname():
         result = m.get(hostname_filter)
         xml_doc = xml.dom.minidom.parseString(result.xml)
         int_info = xml_doc.getElementsByTagName('hostname')
+        # noinspection PyBroadException
         try:
             hostname = int_info[0].firstChild.nodeValue
         except:
@@ -125,13 +128,13 @@ def get_restconf_hostname():
     return hostname
 
 
-
 oper_data = get_restconf_int_oper_data('GigabitEthernet1')
-print('Interface Operational Data via RESTCONF: \n')
+
+print(str('\n\nInterface GigabitEthernet1 Operational Data via RESTCONF: \n'))
 print(json.dumps(oper_data, indent=4, separators=(' , ', ' : ')))
 
 # print(str('Device Hostname via NETCONF: \n' + get_netconf_hostname()))
 
-print(str('\nInterface Operational Status via NETCONF: \n' + get_netconf_int_oper_status('GigabitEthernet2')))
+print(str('\nInterface GigabitEthernet2 Operational Status via NETCONF: \n' + get_netconf_int_oper_status('GigabitEthernet2')))
 
 print(str('\nDevice Hostname via RESTCONF: \n' + get_restconf_hostname()))

@@ -25,15 +25,14 @@ __version__ = "0.1.0"
 __copyright__ = "Copyright (c) 2019 Cisco and/or its affiliates."
 __license__ = "Cisco Sample Code License, Version 1.1"
 
-
 import cli
 from cli import cli, execute, configure
 
 from config import FOLDER_NAME
 
 import os
-os.chdir(FOLDER_NAME)
 
+os.chdir(FOLDER_NAME)
 
 # This code is needed to run after every change made to the configuration of the switch
 
@@ -55,14 +54,12 @@ if not os.path.exists('Config_Files'):
 
     print('Configured VASI interfaces, vrf R, Loopback111, and routing')
 
-
     f = open('monitor_route_applet.txt', 'r')
     cli_commands = f.read()
     configure(cli_commands)
     f.close()
 
     print('Configured EEM applet')
-
 
 # save baseline running configuration
 
